@@ -1,0 +1,32 @@
+.panel{
+    margin-top: 200px;
+    width: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  .panel form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .title{
+    margin-bottom: 20px;
+    padding: 0 25px;
+    text-align: center;
+    color: var(--primary-color)
+  }
+  .submitButton {
+    margin-bottom: 20px;
+  }
+
+  
+  @media screen and (max-width: 899px) {
+    .panel {
+      width: fit-content;
+    }
+  }

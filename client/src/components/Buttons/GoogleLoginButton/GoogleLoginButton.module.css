@@ -1,0 +1,15 @@
+.buttonContainer{
+    width: 100%;
+}
+.googleLogin {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.googleLogin img {
+    margin-right: 10px;
+}
+.googleLogin span {
+    height: fit-content;
+}

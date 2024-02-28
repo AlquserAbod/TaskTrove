@@ -1,0 +1,72 @@
+/* components/styles.module.css */
+.stickyNote {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  height: 150px;
+  padding: 16px;
+  border: 2px solid #ddd;
+  margin: 8px;
+  position: relative;
+  transition: background-color 0.3s ease;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  overflow-y: auto;
+  padding: 10px;
+}
+.stickyNote::-webkit-scrollbar {
+  width: 0.5em;
+}
+
+.stickyNote::-webkit-scrollbar-thumb {
+  background-color: transparent; /* Hide scrollbar thumb */
+}
+
+.stickyNote::-webkit-scrollbar-track {
+  background-color: transparent; /* Hide scrollbar track */
+}
+
+.completed {
+  opacity: 0.7;
+}
+
+.title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* Optional: Hover effect */
+.stickyNote:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Completion indicator styles */
+.completedIndicator {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.completedIndicator.checkmark {
+  background-color: #2ecc71; /* Green color for completed */
+  color: white;
+  border-radius: 50%;
+}
+
+.completedIndicator.cross {
+  background-color: #e74c3c; /* Red color for not completed */
+  color: white;
+  border-radius: 50%;
+}

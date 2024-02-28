@@ -1,0 +1,27 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 50px;
+}
+
+.or {
+  margin-bottom: 10px;
+  margin-top: 20px;
+  font-weight: 900;
+  font-size: larger;
+}
+.dialog {
+    text-align: center;
+    margin: 0px 20px 50px 20px;
+}
+@media (max-width: 600px) {
+    .imageContainer img {
+        width: 100%;
+    }
+    .imageContainer {
+        margin-right: 30px;
+        margin-left: 30px;
+    }
+} 

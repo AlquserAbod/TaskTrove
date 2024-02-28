@@ -1,0 +1,55 @@
+.container {
+  width: 100%;
+}
+.label {
+  margin-bottom: 15px;
+  position: relative;
+  width: 100%;
+  border-bottom: 1px solid #ddd;
+}
+
+.input {
+  width: 100%;
+  padding: 10px 0px;
+  margin-top: 20px;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  font-size: 1em;
+}
+
+.input::placeholder {
+  opacity: 0;
+}
+
+.span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateY(30px);
+  font-size: 1em;
+  transition-duration: 300ms;
+}
+
+.label:focus-within > span,
+.input:not(:placeholder-shown) + span
+{
+    transform:translateY(0px);
+}
+
+.label:not(.error):focus-within > span,
+.input.error:not(:placeholder-shown) + span{
+  color: var(--primary-color);
+  border-color: #ddd;
+
+  transform:translateY(0px);
+
+}
+
+.label.error {
+  color: red;
+  border-color: red;
+}
+.errorList {
+  list-style: none;
+}

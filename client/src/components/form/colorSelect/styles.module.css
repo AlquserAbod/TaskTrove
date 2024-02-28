@@ -1,0 +1,9 @@
+.selectDropdown:focus {
+  border-color: #6b7cff;
+}
+.selectDropdown {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+}

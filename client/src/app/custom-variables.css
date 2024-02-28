@@ -1,0 +1,9 @@
+:root{
+  --primary-color: #1F4547;
+  --secondary-color: #BFA575;
+  --light-color: #eeee;
+
+  --primary-color-h: 191; /* Hue value of the color */
+  --primary-color-s: 43%; /* Saturation value of the color */
+  --primary-color-l: 18%; /* Lightness value of the color */
+}

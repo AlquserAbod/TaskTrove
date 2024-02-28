@@ -1,0 +1,60 @@
+.filterSection {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+.filterItem {
+  display: flex;
+  flex-direction: column;
+
+}
+  
+.filterItem label {
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+  
+.inputText {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+}
+  
+.inputText:focus{
+  border-color: #6b7cff;
+}
+
+  
+.submitButton {
+  padding: 10px 20px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+  
+.submitButton:hover {
+    background-color: hsl(var(--primary-color-h), var(--primary-color-s), calc(var(--primary-color-l) * 1.2)); /* Lighter by 20% */
+}
+.complatedFilter {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  text-align: center;
+  align-items: center;
+}
+@media screen and (max-width: 899px) {
+  .panel {
+    width: fit-content;
+  }
+}

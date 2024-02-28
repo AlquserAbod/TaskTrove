@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Email Verification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 40px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo img {
+            max-width: 150px;
+        }
+        .verify-text {
+            text-align: center;
+            color: #1F4547;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .verify-link {
+            text-align: center;
+            margin-top: 30px;
+        }
+        .verify-link a {
+            display: inline-block;
+            padding: 12px 24px;
+            text-decoration: none;
+            background-color: #1F4547;
+            color: #ffffff;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <!-- add hosted image url  localhost not work-->
+            <img src="https://i.imgur.com/h6BnjHt.png" alt="TaskTrove Logo">
+        </div>
+        <div class="verify-text">
+            Verify your email address
+        </div>
+        <p>Hello {{username}}!</p>
+        <p>Welcome to TaskTrove. To complete your registration, please verify your email address by clicking the button below:</p>
+        <div class="verify-link">
+            <a href="{{verify-link}}">Verify Email</a>
+        </div>
+        <p>If you didn't create an account using this email address, please disregard this email.</p>
+        <p>Thanks,<br> The TaskTrove Team</p>
+    </div>
+</body>
+</html>
