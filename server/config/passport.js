@@ -4,10 +4,12 @@ const User = require('../Models/user');
 const { hashPassword } = require('../utils/hash_password.js');
 const { signJWTToken } = require('../utils/jwtToken');
 const generateRandomPassword = require('../utils/generatePassword');
+
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: 'api/auth/google/callback' // Your callback URL
+    callbackURL: 
+      `${process.env.NODE_ENV == "production" ? "https" : "http"}://${process.env.API_URL}/auth/google/callback`
   },
   async (accessToken, refreshToken, profile, cb) => {
     try {
