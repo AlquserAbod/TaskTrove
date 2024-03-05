@@ -13,7 +13,8 @@ passport.use(new GoogleStrategy({
   },
   async (accessToken, refreshToken, profile, cb) => {
     try {
-      let user = await User.findOne({ googleId: profile.id });
+          let user = await User.findOne({ $or: [{ googleId: profile.id }, { email: profile.emails[0].value }] });
+          
           if(!user){
             user = await new User({
               googleId: profile.id,
