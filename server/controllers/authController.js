@@ -1,5 +1,4 @@
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const axios = require('axios');
 const User = require('../Models/user');
 const { validationResult } = require('express-validator');
@@ -7,6 +6,8 @@ const { signJWTToken } = require('../utils/jwtToken');
 const { hashPassword,comparePassword } = require('../utils/hash_password.js');
 const { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } = require("firebase/storage");
 const { RandomAvatarFileName } = require('../utils/random.js');
+const ErrorTypes = require('../errorTypes.js');
+const { Error } = require('mongoose');
 
 const registerUser = async (req, res) => {
   try {
@@ -14,7 +15,7 @@ const registerUser = async (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      return res.status(400).json({ success: false,errors: errors.array() });
+      return res.status(400).json({ success: false,errors: errors.array(), type: ErrorTypes.FIELD_ERRORS });
     }
 
     let userData = {
@@ -22,8 +23,8 @@ const registerUser = async (req, res) => {
       email: email,
       password: await hashPassword(password),
     };
-    //upload image 
 
+    //upload image 
     if (req.file) {
       // Upload image to Firebase Storage
       const storage = getStorage();
@@ -52,7 +53,6 @@ const registerUser = async (req, res) => {
 
       await axios.post(`${process.env.API_URL}/auth/verify/send`, {user: savedUser,})
       .then((response) => {
-        console.log("email sented");
         return res.status(200).json({
           success: true,
           message: `Verification email sent to '${savedUser.email}'. Please check your inbox to verify your email address.`,
@@ -74,8 +74,7 @@ const registerUser = async (req, res) => {
     return res.status(500).json({
       success: false,
       error: "Something went wrong, please try again later"
-    });
-  }
+    });  }
 };
 
 const loginUser = async (req, res) => {
@@ -86,14 +85,14 @@ const loginUser = async (req, res) => {
 
     // if has fields error return this errors
     if (!errors.isEmpty()) {
-      return res.status(400).json({ success: false,errors: errors.array() });
+      return res.status(400).json({ success: false,errors: errors.array(), type: ErrorTypes.FIELD_ERRORS });
     }
 
     let existsUser = await User.findOne({ email: email });
-    if (!existsUser) return res.status(401).json({ success: false, error: "Invalid credentials" });
+    if (!existsUser) return res.status(401).json({ success: false,type: ErrorTypes.INVALID_CREDENTIALS, error: "Invalid credentials" });
     
     const passwordCorrect = await comparePassword(password,existsUser.password);
-    if (!passwordCorrect) return res.status(401).json({ error: "Invalid credentials" });
+    if (!passwordCorrect) return res.status(401).json({ success: false,type: ErrorTypes.INVALID_CREDENTIALS, error: "Invalid credentials" });
 
     if(existsUser.isVerified === false) {
 
@@ -143,12 +142,12 @@ const updateUser = async (req, res) => {
 
     // if has fields error return this errors
     if (!errors.isEmpty()) {
-      return res.status(400).json({ success: false,errors: errors.array() });
+      return res.status(400).json({ success: false,errors: errors.array(), type: ErrorTypes.FIELD_ERRORS });
     }
 
     // Check if user is using Google services
     if (req.body.googleId === null) {
-      return res.status(400).json({ success: false, error: "Updates not allowed for users using Google services" });
+      return res.status(400).json({ success: false,type: USING_GOOGLE_SERVICE, error: "Updates not allowed for users using Google services" });
     }
 
     const user = req.user; // Assuming user details are available in req.user
@@ -222,8 +221,9 @@ const UpdatePassword = async (req, res) => {
     const errors = validationResult(req);
     
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        return res.status(400).json({ success: false ,errors: errors.array() , type: ErrorTypes.FIELD_ERRORS});
     }
+
 
     const { password } = req.body;
 
