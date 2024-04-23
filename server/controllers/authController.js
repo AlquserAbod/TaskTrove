@@ -6,7 +6,7 @@ const { signJWTToken } = require('../utils/jwtToken');
 const { hashPassword,comparePassword } = require('../utils/hash_password.js');
 const { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } = require("firebase/storage");
 const { RandomAvatarFileName } = require('../utils/random.js');
-const ErrorTypes = require('../errorTypes.js');
+const ResponseTypes = require('../responseTypes.js');
 const { Error } = require('mongoose');
 
 const registerUser = async (req, res) => {
@@ -15,7 +15,7 @@ const registerUser = async (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      return res.status(400).json({ success: false,errors: errors.array(), type: ErrorTypes.FIELD_ERRORS });
+      return res.status(400).json({ success: false,errors: errors.array(), type: ResponseTypes.FIELD_ERRORS });
     }
 
     let userData = {
@@ -56,12 +56,14 @@ const registerUser = async (req, res) => {
         return res.status(200).json({
           success: true,
           message: `Verification email sent to '${savedUser.email}'. Please check your inbox to verify your email address.`,
+          type: ResponseTypes.WAITING_VERIFY_EMAIL
         });
       }).catch((err) => {
         console.log(err);
         return res.status(500).json({
           success: false,
-          error: "Something went wrong, please try again later"
+          error: "Something went wrong, please try again later",
+          type: ResponseTypes.INTERNAL_ERROR
         });
       });
 
@@ -73,8 +75,10 @@ const registerUser = async (req, res) => {
     console.error("error in register controller :", err);
     return res.status(500).json({
       success: false,
-      error: "Something went wrong, please try again later"
-    });  }
+      error: "Something went wrong, please try again later",
+      type: ResponseTypes.INTERNAL_ERROR
+    });  
+  }
 };
 
 const loginUser = async (req, res) => {
@@ -85,27 +89,29 @@ const loginUser = async (req, res) => {
 
     // if has fields error return this errors
     if (!errors.isEmpty()) {
-      return res.status(400).json({ success: false,errors: errors.array(), type: ErrorTypes.FIELD_ERRORS });
+      return res.status(400).json({ success: false,errors: errors.array(), type: ResponseTypes.FIELD_ERRORS });
     }
 
     let existsUser = await User.findOne({ email: email });
-    if (!existsUser) return res.status(401).json({ success: false,type: ErrorTypes.INVALID_CREDENTIALS, error: "Invalid credentials" });
+    if (!existsUser) return res.status(401).json({ success: false,type: ResponseTypes.INVALID_CREDENTIALS, error: "Invalid credentials" });
     
     const passwordCorrect = await comparePassword(password,existsUser.password);
-    if (!passwordCorrect) return res.status(401).json({ success: false,type: ErrorTypes.INVALID_CREDENTIALS, error: "Invalid credentials" });
+    if (!passwordCorrect) return res.status(401).json({ success: false,type: ResponseTypes.INVALID_CREDENTIALS, error: "Invalid credentials" });
 
     if(existsUser.isVerified === false) {
 
-      await axios.post(`${process.env.API_URL}/auth/verify/send`, {user: existsUser,})
+      await axios.post(`${process.env.API_URL}/auth/verify/send`, {user: existsUser})
       .then((response) => {
-        return res.status(200).json({
+        return res.status(401).json({
           success: false,
           message: `Verification email sent to '${existsUser.email}'. Please check your inbox to verify your email address.`,
+          type: ResponseTypes.WAITING_VERIFY_EMAIL
         });
       }).catch((err) => {
         return res.status(500).json({
           success: false,
-          error: "Something went wrong, please try again later"
+          error: "Something went wrong, please try again later",
+          type: ResponseTypes.INTERNAL_ERROR
         });
       });
 
@@ -142,7 +148,7 @@ const updateUser = async (req, res) => {
 
     // if has fields error return this errors
     if (!errors.isEmpty()) {
-      return res.status(400).json({ success: false,errors: errors.array(), type: ErrorTypes.FIELD_ERRORS });
+      return res.status(400).json({ success: false,errors: errors.array(), type: ResponseTypes.FIELD_ERRORS });
     }
 
     // Check if user is using Google services
@@ -203,7 +209,8 @@ const updateUser = async (req, res) => {
       }).catch((err) => {
         return res.status(500).json({
           success: false,
-          error: "Something went wrong, please try again later"
+          error: "Something went wrong, please try again later",
+          type: ResponseTypes.INTERNAL_ERROR
         });
       });
     }else {
@@ -212,7 +219,11 @@ const updateUser = async (req, res) => {
     }
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ success: false, error: "Something went wrong, please try again later" });
+    return res.status(500).json({ 
+      success: false, 
+      error: "Something went wrong, please try again later",
+      type: ResponseTypes.INTERNAL_ERROR 
+    });
   }
 };
 
@@ -221,7 +232,7 @@ const UpdatePassword = async (req, res) => {
     const errors = validationResult(req);
     
     if (!errors.isEmpty()) {
-        return res.status(400).json({ success: false ,errors: errors.array() , type: ErrorTypes.FIELD_ERRORS});
+        return res.status(400).json({ success: false ,errors: errors.array() , type: ResponseTypes.FIELD_ERRORS});
     }
 
 
@@ -241,9 +252,10 @@ const UpdatePassword = async (req, res) => {
   } catch (error) {
       console.log(error);
       return res.status(500).json({
-          success: false,
-          error: "Something went wrong, please try again later"
-        });
+        success: false,
+        error: "Something went wrong, please try again later",
+        type: ResponseTypes.INTERNAL_ERROR
+      });
   }
 };
 

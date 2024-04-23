@@ -1,7 +1,0 @@
-const ErrorTypes = {
-    FIELD_ERRORS: 'FIELD_ERRORS',
-    INVALID_CREDENTIALS: 'INVALID_CREDENTIALS',
-    USING_GOOGLE_SERVICE: "USING_GOOGLE_SERVICE",
-};
-  
-module.exports = ErrorTypes;

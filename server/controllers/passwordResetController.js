@@ -63,8 +63,9 @@ const forgetPasswordController = async (req, res) => {
         console.error(error);
         return res.status(500).json({
             success: false,
-            error: "Something went wrong, please try again later"
-          });
+            error: "Something went wrong, please try again later",
+            type: ResponseTypes.INTERNAL_ERROR
+        });
     }
 
 };
@@ -103,7 +104,8 @@ const PasswordResetController = async (req,res) => {
         console.log(error);
         return res.status(500).json({
             success: false,
-            error: "Something went wrong, please try again later"
+            error: "Something went wrong, please try again later",
+            type: ResponseTypes.INTERNAL_ERROR
           });
     }
 }
