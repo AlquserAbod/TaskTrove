@@ -46,8 +46,9 @@ const registerUser = async (req, res) => {
     const newUser = new User(userData);
     const savedUser = await newUser.save();
 
-    //create auth token
-    const token = signJWTToken(savedUser._id);
+      // Remove password field from user object before creating JWT token
+      const { password: _, ...sanitizedUser } = savedUser.toObject();
+      const token = signJWTToken(sanitizedUser);
     
     if (savedUser.isVerified === false) {
 
@@ -116,12 +117,10 @@ const loginUser = async (req, res) => {
       });
 
     }else {
-      const token = signJWTToken(existsUser._id);
+      const { password: _, ...sanitizedUser } = existsUser.toObject();
+      const token = signJWTToken(sanitizedUser);
       return res.status(200).json({ success:true, token:token });
     }
-
-
-
   } catch (err) {
     console.error(err);
     return res.status(500).json({ success: false });

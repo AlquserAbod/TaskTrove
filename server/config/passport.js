@@ -26,7 +26,10 @@ passport.use(new GoogleStrategy({
             }).save();
           }
 
-          const token = signJWTToken(user._id);
+          const sanitizedUser = { ...user.toObject() };
+          delete sanitizedUser.password;
+    
+          const token = signJWTToken(sanitizedUser);
 
           cb(null, user,{token});
       } catch (err) {

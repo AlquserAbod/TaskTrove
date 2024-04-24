@@ -9,8 +9,7 @@ async function auth(req, res, next) {
         if (!token) return res.status(401).json({ errorMessage: "Unauthorized" });
 
         const verified = jwt.verify(token, process.env.JWT_SECRET);
-        const userId = Types.ObjectId.createFromHexString(verified.user);
-        const user = await User.findById(userId);
+        const user = Types.ObjectId.createFromHexString(verified.user);
 
         if (!user) return res.status(401).json({ errorMessage: "Unauthorized" });
 
