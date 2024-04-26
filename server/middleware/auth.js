@@ -13,7 +13,7 @@ async function auth(req, res, next) {
 
         if (!user) return res.status(401).json({ errorMessage: "Unauthorized" });
 
-        req.user = user;
+        req.user = await User.findById(user._id);
 
         next();
     } catch (err) {

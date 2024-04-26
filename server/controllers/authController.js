@@ -243,7 +243,7 @@ const UpdatePassword = async (req, res) => {
     const passwordHash = await bcrypt.hash(password, salt);
 
     user.password = passwordHash;
-
+    
     await user.save();
 
     return res.status(200).json({success: true, message: "password changed successfuly"});
