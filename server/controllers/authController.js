@@ -237,7 +237,7 @@ const UpdatePassword = async (req, res) => {
 
     const { password } = req.body;
 
-    user = req.user;
+    let user = req.user;
     
     const salt = await bcrypt.genSalt();
     const passwordHash = await bcrypt.hash(password, salt);
@@ -261,7 +261,7 @@ const UpdatePassword = async (req, res) => {
 const deleteAcoount = async (req, res) => {
     try {
       const userId = req.user._id; 
-      console.log('user id:',userId);
+      
       const deletedUser = await User.findByIdAndDelete(userId);
       if (!deletedUser) {
           throw new Error('Object not found'); // Object with given ID not found
