@@ -8,6 +8,7 @@ const { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } = require("
 const { RandomAvatarFileName } = require('../utils/random.js');
 const ResponseTypes = require('../responseTypes.js');
 const { Error } = require('mongoose');
+const { type } = require('os');
 
 const registerUser = async (req, res) => {
   try {
@@ -198,6 +199,7 @@ const updateUser = async (req, res) => {
         return res.status(200).json({
           success: false,
           verifyEmail: true,
+          type: ResponseTypes.WAITING_VERIFY_EMAIL,
           message: `Verification email sent to '${updatedUser.email}'. Please check your inbox to verify your email address.`,
         });
 
@@ -211,9 +213,9 @@ const updateUser = async (req, res) => {
 
     }else {
       const NewUserToken = signJWTToken(updatedUser);
-      return res.status(200).json({ success: true, message: "profile updated successfuly", token: NewUserToken });
+      return res.status(200).json({ success: true, message: "profile updated successfuly", token: NewUserToken});
     }
-    
+
   } catch (err) {
     console.error(err);
     return res.status(500).json({ 
