@@ -197,7 +197,7 @@ const updateUser = async (req, res) => {
       await axios.post(`${process.env.API_URL}/auth/verify/send`, {user: updatedUser,})
       .then(async (response) => {
         return res.status(200).json({
-          success: false,
+          success: true,
           verifyEmail: true,
           type: ResponseTypes.WAITING_VERIFY_EMAIL,
           message: `Verification email sent to '${updatedUser.email}'. Please check your inbox to verify your email address.`,
