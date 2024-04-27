@@ -141,8 +141,8 @@ const getUser = (req,res) => {
 
 const updateUser = async (req, res) => {
   try {
-    const { username, email, imagePath } = req.body;
-    console.log(email,username);
+    const { username, email } = req.body;
+
     const errors = validationResult(req);
 
     // if has fields error return this errors
@@ -167,9 +167,6 @@ const updateUser = async (req, res) => {
       if (email && email !== user.email) {
         user.email = email;
         user.isVerified = false; 
-
-        
-
       }
 
       if (req.file) {
@@ -198,24 +195,25 @@ const updateUser = async (req, res) => {
     if(!updatedUser.isVerified){
       await axios.post(`${process.env.API_URL}/auth/verify/send`, {user: updatedUser,})
       .then(async (response) => {
+        return res.status(200).json({
+          success: false,
+          verifyEmail: true,
+          message: `Verification email sent to '${updatedUser.email}'. Please check your inbox to verify your email address.`,
+        });
 
-          return res.status(200).json({
-            success: false,
-            VerifyEmail: true,
-            message: `Verification email sent to '${updatedUser.email}'. Please check your inbox to verify your email address.`,
-          });
-
-      }).catch((err) => {
+      }).catch(() => {
         return res.status(500).json({
           success: false,
           error: "Something went wrong, please try again later",
           type: ResponseTypes.INTERNAL_ERROR
         });
       });
-    }else {
-      return res.status(200).json({ success: true, message: "profile updated successfuly", user: updatedUser });
 
+    }else {
+      const NewUserToken = signJWTToken(updatedUser);
+      return res.status(200).json({ success: true, message: "profile updated successfuly", token: NewUserToken });
     }
+    
   } catch (err) {
     console.error(err);
     return res.status(500).json({ 

@@ -78,11 +78,11 @@ function updateProfile() {
                         type: "danger",
                         message: err.response.data.error
                     }); // has any error 
-                }else {setAlert(null); }
+                }else setAlert(null);
 
 
                 console.log("error :", err);
-            })
+            });
 
         }catch( err ) {
             console.log(err);
