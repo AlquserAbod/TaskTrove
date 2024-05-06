@@ -1,24 +1,32 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import styles from '../styles.module.css';
 import TextInput from '@/components/form/textInput/TextInput';
 import SubmitButton from '@/components/Buttons/submitButton/SubmitButton';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
+import { AuthContext } from '@/Context/AuthContext';
 
 function resetPasswordPage() {
     const passwordRef = useRef(null);
     const passwordConfirmRef = useRef(null);
     const router = useRouter();
 
-    const { id,token } = router.query; 
+    const { id,token: resetpassword_token } = router.query; 
 
     const [errors, setErrors] = useState(null);
     const [alert, setAlert] = useState(null);
+    const { loggedIn } = useContext(AuthContext);
+
+    useEffect(() => {
+        if (loggedIn) {
+          router.push('/');
+        }
+      }, []);
 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         try {
             const resetPasswordFormData = {
                 password: passwordRef.current.value,

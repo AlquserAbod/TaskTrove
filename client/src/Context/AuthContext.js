@@ -40,7 +40,6 @@ function AuthContextProvider(props) {
   const getUser = async () => {
     try {
       const token = getToken();
-  
       if (token) {
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/auth/user`, {
           headers: {
@@ -95,7 +94,6 @@ function AuthContextProvider(props) {
 
       
       const token = router.query.token;
-  
       if (token) {
           localStorage.setItem(process.env.NEXT_PUBLIC_AUTH_SESSION_KEY, token);
           location.href = process.env.NEXT_PUBLIC_APP_URL
