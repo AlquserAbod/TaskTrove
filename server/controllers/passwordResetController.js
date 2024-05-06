@@ -7,6 +7,7 @@ const fs = require('fs');
 const sendEmail = require('../utils/sendEmail');
 const { readTemplateParms } = require('../utils/readTemplateParms');
 const path = require('path');
+const ResponseTypes = require('../responseTypes.js');
 
 const forgetPasswordController = async (req, res) => {
     try {
@@ -22,12 +23,12 @@ const forgetPasswordController = async (req, res) => {
         if (!user)
             return res
                 .status(500)
-                .send({ success: false, error: "User with given email does not exist!" });
+                .send({ success: false, error: "User with given email does not exist!", type: ResponseTypes.USER_WITH_EMAIL_NOTFOUND });
 
             if(user.googleId != null)
                 return res
                     .status(500)
-                    .send({ success: false, error: "User with given email used Google authentication. Please reset your password through Google." });
+                    .send({ success: false, error: "User with given email used Google authentication. Please reset your password through Google.", type: ResponseTypes.USING_GOOGLE_SERVICE });
     
         let tokenModel = await PasswordResetToken.findOne({ userId: user._id });
         if (!tokenModel) {
@@ -59,6 +60,7 @@ const forgetPasswordController = async (req, res) => {
         return res
             .status(200)
             .json({ success: true, message: "Password reset link sent to your email account" });
+
     } catch (error) {
         console.error(error);
         return res.status(500).json({
