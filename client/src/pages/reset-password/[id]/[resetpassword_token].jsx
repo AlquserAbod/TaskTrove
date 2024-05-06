@@ -12,7 +12,7 @@ function resetPasswordPage() {
     const passwordConfirmRef = useRef(null);
     const router = useRouter();
 
-    const { id,token: resetpassword_token } = router.query; 
+    const { id,resetpassword_token: token } = router.query; 
 
     const [errors, setErrors] = useState(null);
     const [alert, setAlert] = useState(null);
