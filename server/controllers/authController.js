@@ -9,6 +9,7 @@ const { RandomAvatarFileName } = require('../utils/random.js');
 const ResponseTypes = require('../responseTypes.js');
 const { Error } = require('mongoose');
 const { type } = require('os');
+const generateRandomPassword = require('../utils/generatePassword.js');
 
 const registerUser = async (req, res) => {
   try {
@@ -274,8 +275,60 @@ const deleteAcoount = async (req, res) => {
     }
 }
 
+const storeGoogleUserInDB = async (req, res) => {
+  try {
+    const { googleId, username, email, imagePath } = req.body;
+
+    // Check if the user already exists in the database
+    let user = await User.findOne({ $or: [{ googleId }, { email }] });
+
+    if (user) {
+      if(!user.isVerified) {
+        return res.status(401).json({
+          success: false,
+          type: ResponseTypes.WAITING_VERIFY_EMAIL
+        });
+      }else {      
+        
+        const sanitizedUser = { ...user.toObject() };
+        delete sanitizedUser.password;
+
+        const token = signJWTToken(sanitizedUser);
+
+        return res.status(200).json({ success:true, message: 'User already exists', type: ResponseTypes.USER_ALREADY_EXISTS, token, user });
+      }
+    }
+
+    // If user doesn't exist, create a new user
+    user = new User({
+      googleId,
+      username,
+      email,
+      password: await hashPassword(generateRandomPassword()), // Generate a random password
+      imagePath,
+      isVerified: true // You can set this based on your application's logic
+    });
+
+    // Save the user to the database
+    await user.save();
+
+    // Create a JWT token for the user
+    const sanitizedUser = { ...user.toObject() };
+    delete sanitizedUser.password;
+
+    const token = signJWTToken(user);
+
+    // Respond with success and JWT token
+    res.status(200).json({ success: true, message: 'User stored successfully',token, user });
+  } catch (error) {
+    console.error('Error storing google user in db:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
 module.exports = {
   registerUser,
+  storeGoogleUserInDB,
   loginUser,
   getUser,
   updateUser,

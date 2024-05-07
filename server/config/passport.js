@@ -4,6 +4,8 @@ const User = require('../Models/user');
 const { hashPassword } = require('../utils/hash_password.js');
 const { signJWTToken } = require('../utils/jwtToken');
 const generateRandomPassword = require('../utils/generatePassword');
+const { default: axios } = require('axios');
+const { log } = require('winston');
 
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
@@ -13,27 +15,19 @@ passport.use(new GoogleStrategy({
   },
   async (accessToken, refreshToken, profile, cb) => {
     try {
-          let user = await User.findOne({ $or: [{ googleId: profile.id   }, { email: profile.emails[0].value }] });
-          
-          if(!user){
-            user = await new User({
-              googleId: profile.id,
-              username: profile.displayName,
-              email: profile.emails[0].value,
-              password: await hashPassword(generateRandomPassword()),
-              imagePath: profile.photos[0].value,
-              isVerified: true,
-            }).save();
-          }
+      console.log("profile :", profile);
+          await axios.post(`${process.env.API_URL}/auth/google/store`, {
+            googleId: profile.id,
+            username: profile.displayName,
+            email: profile.emails[0].value,
+            imagePath: profile.photos[0].value
+          })
+          .then((res) => {
+            cb(null, res.data.user,{token: res.data.token})
+          } ).catch((err) =>cb(err, null));
 
-          const sanitizedUser = { ...user.toObject() };
-          delete sanitizedUser.password;
-    
-          const token = signJWTToken(sanitizedUser);
-
-          cb(null, user,{token});
-      } catch (err) {
-        console.log(err);
+        } catch (err) {
+        console.log("error in pass conf :", err);
         cb(err, null);
       }
     }

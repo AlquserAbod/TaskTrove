@@ -12,6 +12,8 @@ const resetPasswordValidator = require('../validators/resetPasswordValidator');
 // Register route
 router.post('/', upload.single('avatar'), signupValidator, controller.registerUser);
 
+
+
 // Login route
 router.post('/login', signinValidator, controller.loginUser);
 
@@ -35,4 +37,5 @@ router.put(
     updateAuthValidator,
     controller.updateUser
 );
+
 module.exports = router;
