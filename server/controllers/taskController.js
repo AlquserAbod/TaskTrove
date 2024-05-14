@@ -41,8 +41,8 @@ const getAllTasks = async (req, res) => {
   const { colors, title, isCompleted } = req.query;
   const filters = { userId};
 
-  if (Array.isArray(colors) && colors.length > 0) {
-    console.log("colors :", colors);
+  console.log("colors :", colors);
+  if (Array.isArray(colors) && colors. ength > 0) {
     const validColors = colors.filter(color => Colors[color.toUpperCase()]);
     console.log("validColors :", validColors);
 
