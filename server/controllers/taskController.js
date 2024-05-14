@@ -38,7 +38,7 @@ const createTasks = async (req, res) => {
 
 const getAllTasks = async (req, res) => {
   const userId = req.user._id;
-  const { colors, title, isCompleted } = req.query;
+  let { colors, title, isCompleted } = req.query;
   const filters = { userId};
 
   console.log("colors :", colors);
