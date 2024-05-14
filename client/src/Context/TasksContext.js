@@ -30,7 +30,7 @@ const TasksProvider = ({ children }) => {
             }
     
             // Check if color matches the filter (if provided)
-            if (data.color && task.color !== data.color) {
+            if (data.colors && task.color !== data.colors[0]) {
               return false;
             }
     

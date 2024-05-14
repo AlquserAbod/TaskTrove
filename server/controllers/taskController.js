@@ -38,11 +38,14 @@ const createTasks = async (req, res) => {
 
 const getAllTasks = async (req, res) => {
   const userId = req.user._id;
-  const { color, title, isCompleted } = req.query;
+  const { colors, title, isCompleted } = req.query;
   const filters = { userId};
-  
-  if (color !== undefined && Colors[color.toUpperCase()]) {
-    filters.color = color;
+
+  if (Array.isArray(colors) && colors.length > 0) {
+    const validColors = colors.filter(color => Colors[color.toUpperCase()]);
+    if (validColors.length > 0) {
+      filters.color = { $in: validColors };
+    }
   }
 
   if (title !== undefined) {
@@ -52,7 +55,7 @@ const getAllTasks = async (req, res) => {
   if (isCompleted !== undefined) {
     filters.isCompleted = isCompleted;
   }
-  
+
   try {
     const tasks = await Task.find(filters);
     res.json(tasks);

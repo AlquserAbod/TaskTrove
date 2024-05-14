@@ -63,7 +63,7 @@ const NewTaskModal = ({ show, taskData,onSave, onClose }) => {
 
     try {
       if (taskData) {
-         await updateTask(taskData._id, data);
+        await updateTask(taskData._id, data);
       } else {
         await addTask(data);
       }

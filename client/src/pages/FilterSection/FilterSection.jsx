@@ -35,7 +35,7 @@ const FilterSection = ({ setTasks }) => {
 
         const colorValue = colorSelectRef.current.value;
         if (colorValue != "null") {
-            filterQuery.color = colorValue;
+            filterQuery.colors = [colorValue];
         }
 
 
