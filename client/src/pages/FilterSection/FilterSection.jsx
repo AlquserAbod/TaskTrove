@@ -2,20 +2,18 @@ import { useContext, useRef, useState } from 'react';
 import ColorSelect from '@/components/form/colorSelect/colorSelect';
 import Checkbox from '@/components/form/checkbox/checkbox';
 import styles from './FilterSection.module.css';
-import { AuthContext } from '@/Context/AuthContext';
 import { TasksContext } from '@/Context/TasksContext';
 
 const FilterSection = ({ setTasks }) => {
     const [isCompleted, setIsCompleted] = useState(true);
     const [notCompleted, setnotCompleted] = useState(true);
+    const [selectedColors, setSelectedColors] = useState([]);
     const titleRef = useRef();
     const isComplatedRef = useRef();
-    const colorSelectRef = useRef();
     const notCompletedRef = useRef();
     
 
     const { fetchTasks }  = useContext(TasksContext);
-    const {loggedIn} = useContext(AuthContext);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -33,9 +31,8 @@ const FilterSection = ({ setTasks }) => {
             filterQuery.isCompleted = false;
         }
 
-        const colorValue = colorSelectRef.current.value;
-        if (colorValue != "null") {
-            filterQuery.colors = [colorValue];
+        if (selectedColors.length > 0) {
+            filterQuery.colors = selectedColors.map((c) => c['value']);
         }
 
 
@@ -62,10 +59,10 @@ const FilterSection = ({ setTasks }) => {
             </div>
             <div className={styles.filterItem}>
                 <label htmlFor="color">Color:</label>
-                <ColorSelect 
-                    id="color"
-                    null_disabled={false}
-                    ref={colorSelectRef}/>
+                <ColorSelect
+                    isMulti={true}
+                    defaultValue={[]}
+                    onChange={(selectedOptions) => setSelectedColors(selectedOptions)}/>
             </div>
             <div className={styles.complatedFilter}>
                 <div className={styles.filterItem}>

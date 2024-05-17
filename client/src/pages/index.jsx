@@ -76,7 +76,9 @@ function todos() {
                     ))}
                     </div>
                 ) : (
-                    <p>No tasks available.</p>
+                    <div className={styles.noTasksAvilable}>
+                        No tasks available.
+                    </div>
                 )}
             </div>
 

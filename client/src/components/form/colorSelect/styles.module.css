@@ -1,9 +1,11 @@
-.selectDropdown:focus {
-  border-color: #6b7cff;
+.optionContainer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
-.selectDropdown {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  outline: none;
+.optionColorCircle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid black;
 }

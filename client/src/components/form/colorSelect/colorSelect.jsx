@@ -1,42 +1,41 @@
-import React from 'react';
+import React from 'react'
+import Select from 'react-select';
 import styles from './styles.module.css';
 
-const Colors = Object.freeze({
-  RED: 'red',
-  BLUE: 'blue',
-  GREEN: 'green',
-  YELLOW: 'yellow',
-  ORANGE: 'orange',
-  PURPLE: 'purple',
-  CYAN: 'cyan',
-  MAGENTA: 'magenta',
-  TEAL: 'teal',
-  PINK: 'pink',
-});
+export const Colors = [
+    { value: "red", label: "Red" },
+    { value: "blue", label: "Blue" },
+    { value: "green", label: "Green" },
+    { value: "yellow", label: "Yellow" },
+    { value: "orange", label: "Orange" },
+    { value: "purple", label: "Purple" },
+    { value: "cyan", label: "Cyan" },
+    { value: "magenta", label: "Magenta" },
+    { value: "teal", label: "Teal" },
+    { value: "pink", label: "Pink" }
+]
 
-const ColorSelect = React.forwardRef((props, ref) => {
-  return (
-    <select
-      id="colorSelect"
-      className={`${styles.selectDropdown} ${props.class}`}
-      ref={ref}
 
-      defaultValue="null"
-      {...props}
-    >
-      <option value="null"
-        disabled={props.null_disabled}>
-        Select Color
-      </option>
-      
-      {Object.keys(Colors).map((colorKey) => (
-        <option key={Colors[colorKey]} value={Colors[colorKey]}>
-          {Colors[colorKey].charAt(0).toUpperCase() +
-            Colors[colorKey].slice(1)}
-        </option>
-      ))}
-    </select>
+const formatOptionLabel = ({ value, label }) => (
+    <div className={styles.optionContainer}>
+      <div className={styles.optionColorCircle} style={{background: value}}>
+      </div>
+      <div>{label}</div>
+    </div>
   );
-});
 
-export default ColorSelect;
+
+
+const ColorSelect = (props) => {
+    return (
+        <Select
+            {...props}
+            options={Colors}
+            formatOptionLabel={formatOptionLabel}
+            onChange={props.onChange}
+        />
+    );
+}
+
+
+export default ColorSelect

@@ -14,3 +14,10 @@
   justify-content: center; /* Center the items horizontally */
 
 }
+
+.noTasksAvilable {
+  margin-top: 25px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 500;
+}

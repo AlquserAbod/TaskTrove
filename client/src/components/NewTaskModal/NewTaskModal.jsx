@@ -1,19 +1,19 @@
 // NewTaskModal.js
 import { useContext, useEffect, useRef, useState } from 'react';
-import ColorSelect from '../form/colorSelect/colorSelect';
+import ColorSelect, { Colors } from '../form/colorSelect/colorSelect';
 import Checkbox from '../form/checkbox/checkbox';
-import { AuthContext } from '@/Context/AuthContext';
 import { TasksContext } from '@/Context/TasksContext';
 import styles from './styles.module.css'
+
 const NewTaskModal = ({ show, taskData,onSave, onClose }) => {
 
   const [isCompleted, setIsCompleted] = useState(false);
+  const [selectedColor, setSelectedColor] = useState(null);
   const titleRef = useRef();
   const isCompletedRef = useRef();
-  const colorSelectRef = useRef();
-  const {loggedIn} = useContext(AuthContext)
   const {  addTask, deleteTask, fetchTasks, updateTask } = useContext(TasksContext);
   let [errors, setErrors] = useState([]);
+
 
   useEffect(() => {
     // If taskData is provided, set the form values for editing
@@ -21,45 +21,41 @@ const NewTaskModal = ({ show, taskData,onSave, onClose }) => {
       titleRef.current.value = taskData.title;
       isCompletedRef.current.checked = taskData.isCompleted;
       setIsCompleted(taskData.isCompleted);
-      colorSelectRef.current.value = taskData.color;
+      setSelectedColor(taskData.color);
+
     } else {
       // If taskData is not provided, reset the form for adding a new task
       titleRef.current.value = '';
       isCompletedRef.current.checked = false;
       setIsCompleted(false);
-      colorSelectRef.current.value = null;
-
-      
+      setSelectedColor(null)
     }
   }, [taskData]);
-
 
   const validationForm = () => {
     const formErrors = []
     if(titleRef.current.value.trim() == '') formErrors.push('task title is required') 
-    if(colorSelectRef.current.value.trim() == 'null') formErrors.push('task color is required') 
+    if(selectedColor == null) formErrors.push('task color is required') 
 
     return formErrors
   }
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     //validtion
-
     const formErrors = validationForm();
     if (formErrors.length > 0) {
       setErrors(formErrors);
       return; // Stop form submission if there are errors
     }
 
-
     const data = {
       title: titleRef.current.value,
       isCompleted: isCompletedRef.current.checked,
-      color: colorSelectRef.current.value,
+      color: selectedColor,
       
     };
-
 
     try {
       if (taskData) {
@@ -123,10 +119,9 @@ const NewTaskModal = ({ show, taskData,onSave, onClose }) => {
               <div className="form-group">
                 <label htmlFor="taskColor">Task Color</label>
                 <ColorSelect
-                  null_disabled={true}
-                  required={true}
-                  className="form-control"
-                  ref={colorSelectRef} />
+                  value={Colors.find((c) => c.value == selectedColor)}
+                  onChange= {(selectedOption) => setSelectedColor(selectedOption.value)}
+                  required={true}/>
               </div>
               <br />
               <div className="form-ogroup">

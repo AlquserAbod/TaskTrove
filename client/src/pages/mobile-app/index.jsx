@@ -25,7 +25,7 @@ function index() {
 
 
       <Link 
-      href={'https://app.qr-code-generator.com'}
+      href={'https://www.mediafire.com/file/9d1uenbmr9vbe8y/tasktrove.apk/file'}
       className={'btn btn-outline-primary'}
       > click to download</Link>
     </div>
